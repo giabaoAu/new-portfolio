@@ -59,7 +59,7 @@ export function HeroSection() {
             <Badge className="h-10 w-10 -rotate-12 transform" />
           </a>
         }
-        src={`/linear.webp`}
+        src="/coding.gif"
         showGradient={false}
       />
     </section>
