@@ -5,9 +5,9 @@ import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { motion, useMotionTemplate, useScroll, useTransform } from "framer-motion";
 
 const nav = [
-  { href: "#projects", label: "Projects" },
+  { href: "#work", label: "Work Experience" },
   { href: "#terminal", label: "Terminal" },
-  { href: "#work", label: "Work" },
+  { href: "#projects", label: "Projects" },
   { href: "#about", label: "About" },
   { href: "#resume", label: "Resume" },
 ] as const;

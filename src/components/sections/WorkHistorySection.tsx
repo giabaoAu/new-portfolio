@@ -46,7 +46,7 @@ export function WorkHistorySection() {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.45, ease: "easeOut" }}
         >
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Work History</h2>
+          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Work Experience</h2>
           <p className="mt-3 max-w-2xl text-muted leading-7">
             A snapshot of roles where I’ve shipped real work and grown as an engineer. (Replace the
             placeholders with your exact company names/dates.)
