@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import React from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Briefcase, MapPin } from "lucide-react";
 
 type Role = {
@@ -37,8 +38,16 @@ const roles: Role[] = [
 ];
 
 export function WorkHistorySection() {
+  const sectionRef = React.useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 0.85", "end 0.35"],
+  });
+
+  const lineScaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
   return (
-    <section id="work" className="scroll-mt-24">
+    <section id="work" ref={sectionRef} className="scroll-mt-24">
       <div className="mx-auto w-full max-w-6xl px-4 py-16 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
@@ -52,19 +61,35 @@ export function WorkHistorySection() {
             placeholders with your exact company names/dates.)
           </p>
 
-          <div className="mt-10 grid gap-6 lg:grid-cols-2">
-            {roles.map((r) => (
-              <motion.article
-                key={`${r.company}-${r.title}`}
-                whileHover={{ y: -3 }}
-                transition={{ type: "spring", stiffness: 320, damping: 26 }}
-                className="rounded-2xl border border-border bg-card p-6 shadow-sm ring-1 ring-transparent hover:ring-ring"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
+          <div className="relative mt-10">
+            {/* Timeline rail */}
+            <div className="pointer-events-none absolute inset-y-0 left-4 w-px bg-border/70" />
+            <motion.div
+              aria-hidden
+              className="pointer-events-none absolute inset-y-0 left-4 w-px origin-top bg-gradient-to-b from-foreground/70 via-foreground/40 to-transparent"
+              style={{ scaleY: lineScaleY }}
+            />
+
+            <div className="space-y-8">
+              {roles.map((r, idx) => (
+                <motion.article
+                  key={`${r.company}-${r.title}`}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-120px" }}
+                  transition={{ duration: 0.5, ease: "easeOut", delay: idx * 0.04 }}
+                  className="relative pl-14"
+                >
+                  {/* Node */}
+                  <div className="absolute left-4 top-7 -translate-x-1/2">
+                    <div className="h-3.5 w-3.5 rounded-full border border-border bg-background shadow-sm" />
+                    <div className="absolute inset-0 -z-10 h-3.5 w-3.5 rounded-full bg-foreground/10 blur-[6px]" />
+                  </div>
+
+                  <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
                     <p className="text-sm text-muted">{r.dates}</p>
                     <h3 className="mt-1 text-lg font-semibold tracking-tight">{r.title}</h3>
-                    <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
+                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
                       <span className="inline-flex items-center gap-2">
                         <Briefcase className="h-4 w-4" />
                         {r.company}
@@ -76,19 +101,19 @@ export function WorkHistorySection() {
                         </span>
                       ) : null}
                     </div>
-                  </div>
-                </div>
 
-                <ul className="mt-4 space-y-2 text-sm leading-6 text-muted">
-                  {r.highlights.map((h) => (
-                    <li key={h} className="flex gap-2">
-                      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-foreground/50" />
-                      <span>{h}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.article>
-            ))}
+                    <ul className="mt-4 space-y-2 text-sm leading-6 text-muted">
+                      {r.highlights.map((h) => (
+                        <li key={h} className="flex gap-2">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-foreground/50" />
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
           </div>
         </motion.div>
       </div>
